@@ -70,6 +70,32 @@ PYBIND11_MODULE(spconv_utils, m) {
         "voxel_point_mask"_a = 3, "coors"_a = 4, "num_points_per_voxel"_a = 5,
         "coor_to_voxelidx"_a = 6, "voxel_size"_a = 7, "coors_range"_a = 8,
         "max_points"_a = 9, "max_voxels"_a = 10);
+
+
+  m.def("points_to_voxel_3d_np2", &spconv::points_to_voxel_3d_np2<float, 3>,
+        "matrix tensor_square", "points"_a = 1, "voxels"_a = 2,
+        "voxel_point_mask"_a = 3, "coors"_a = 4, "num_points_per_voxel"_a = 5,
+        "coor_to_voxelidx"_a = 6, "voxel_size"_a = 7, "coors_range"_a = 8,
+        "max_points"_a = 9, "max_voxels"_a = 10);
+  m.def("points_to_voxel_3d_np2", &spconv::points_to_voxel_3d_np2<double, 3>,
+        "matrix tensor_square", "points"_a = 1, "voxels"_a = 2,
+        "voxel_point_mask"_a = 3, "coors"_a = 4, "num_points_per_voxel"_a = 5,
+        "coor_to_voxelidx"_a = 6, "voxel_size"_a = 7, "coors_range"_a = 8,
+        "max_points"_a = 9, "max_voxels"_a = 10);
+
+  // perform the voxelization but also returns the indices to allow doing differentiable voxelization
+  // in pytorchin pytorch. This allows e2e pseudolidar.
+  m.def("points_to_voxel_3d_np_indices_only", &spconv::points_to_voxel_3d_np_indices_only<float, 3>,
+        "matrix tensor_square", "points"_a = 1, "voxels"_a = 2,
+        "voxel_point_mask"_a = 3, "coors"_a = 4, "num_points_per_voxel"_a = 5,
+        "coor_to_voxelidx"_a = 6, "voxel_size"_a = 7, "coors_range"_a = 8,
+        "max_points"_a = 9, "max_voxels"_a = 10, "voxel_pt_indices_into_original_pt_cloud"_a = 11);
+  m.def("points_to_voxel_3d_np_indices_only", &spconv::points_to_voxel_3d_np_indices_only<double, 3>,
+        "matrix tensor_square", "points"_a = 1, "voxels"_a = 2,
+        "voxel_point_mask"_a = 3, "coors"_a = 4, "num_points_per_voxel"_a = 5,
+        "coor_to_voxelidx"_a = 6, "voxel_size"_a = 7, "coors_range"_a = 8,
+        "max_points"_a = 9, "max_voxels"_a = 10, "voxel_pt_indices_into_original_pt_cloud"_a = 11);
+
   m.def("points_to_voxel_3d_np_mean",
         &spconv::points_to_voxel_3d_np_mean<float, 3>, "matrix tensor_square",
         "points"_a = 1, "voxels"_a = 2, "voxel_point_mask"_a = 3, "means"_a = 4,
