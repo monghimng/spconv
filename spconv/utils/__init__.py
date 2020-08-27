@@ -131,14 +131,15 @@ def points_to_voxel_indices_only(points,
                 res["voxel_point_mask"] = voxel_point_mask[voxel_mask]
             voxel_num = coors_.shape[0]
         else:
-            import pdb;pdb.set_trace()
-            voxel_pt_indices_into_original_pt_cloud = np.zeros(shape=(max_voxels, max_points), dtype=np.int32)
+            # empty voxel pt will be signaled by -1, so that the index 0 will refer to pt 0
+            voxel_pt_indices_into_original_pt_cloud = np.full((max_voxels, max_points), -1, dtype=np.int32)
             voxel_num = points_to_voxel_3d_np_indices_only(points, voxels, voxel_point_mask,
                                               coors, num_points_per_voxel,
                                               coor_to_voxelidx,
                                               voxel_size.tolist(),
                                               coors_range.tolist(), max_points,
                                               max_voxels, voxel_pt_indices_into_original_pt_cloud)
+            res['voxel_pt_indices_into_original_pt_cloud'] = voxel_pt_indices_into_original_pt_cloud
     res["voxel_num"] = voxel_num
     res["voxel_point_mask"] = res["voxel_point_mask"].reshape(
         -1, max_points, 1)
@@ -373,13 +374,13 @@ class VoxelGeneratorV2:
                               self._block_filtering, self._block_factor,
                               self._block_size, self._height_threshold,
                               self._height_high_threshold)
-        res = points_to_voxel(points, self._voxel_size,
-                              self._point_cloud_range, self._coor_to_voxelidx,
-                              self._max_num_points, max_voxels
-                              or self._max_voxels, self._full_mean,
-                              self._block_filtering, self._block_factor,
-                              self._block_size, self._height_threshold,
-                              self._height_high_threshold)
+        # res = points_to_voxel(points, self._voxel_size,
+        #                       self._point_cloud_range, self._coor_to_voxelidx,
+        #                       self._max_num_points, max_voxels
+        #                       or self._max_voxels, self._full_mean,
+        #                       self._block_filtering, self._block_factor,
+        #                       self._block_size, self._height_threshold,
+        #                       self._height_high_threshold)
         for k, v in res.items():
             if k != "voxel_num":
                 res[k] = v[:res["voxel_num"]]
